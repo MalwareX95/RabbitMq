@@ -29,7 +29,6 @@ namespace Producer
                 properties.Persistent = true;
                 channel.BasicPublish(exchange: "",
                                      routingKey: queue,
-                                    //  basicProperties: null,
                                      properties,
                                      body);
                 Console.WriteLine(" [x] Sent {0}", message);
