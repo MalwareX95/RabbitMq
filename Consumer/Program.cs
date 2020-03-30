@@ -41,10 +41,11 @@ namespace Consumer
                     int dots = message.Split('.').Length - 1;
                     Thread.Sleep(dots * 1000);
                     Console.WriteLine(" [x] Done");
+                    channel.BasicAck(ea.DeliveryTag, multiple: false);
                 };
                 
                 channel.BasicConsume(queue,
-                                     autoAck: true,
+                                     autoAck: false,
                                      consumer);
 
                 Console.WriteLine(" Press [enter] to exit.");
