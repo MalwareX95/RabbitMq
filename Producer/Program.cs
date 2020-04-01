@@ -14,22 +14,13 @@ namespace Producer
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare
-                (
-                    queue,
-                    durable: false,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null
-                );
-
+                channel.ExchangeDeclare("logs", ExchangeType.Fanout);                
                 var message = GetMessage(args);
                 var body = Encoding.UTF8.GetBytes(message);
-                var properties = channel.CreateBasicProperties();
-                properties.Persistent = true;
-                channel.BasicPublish(exchange: "",
-                                     routingKey: queue,
-                                     properties,
+                
+                channel.BasicPublish(exchange: "logs",
+                                     routingKey: "",
+                                     basicProperties: null,
                                      body);
                 Console.WriteLine(" [x] Sent {0}", message);
                 Console.WriteLine(" Press [enter] to exit.");
