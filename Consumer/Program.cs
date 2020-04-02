@@ -22,7 +22,7 @@ namespace Consumer
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare("direct_logs", ExchangeType.Direct);
+                channel.ExchangeDeclare("topic_logs", ExchangeType.Topic);
 
                 var queue = channel.QueueDeclare().QueueName;
 
@@ -36,14 +36,14 @@ namespace Consumer
                     return;
                 }
 
-                foreach(var severity in args)
+                foreach(var bindingKey in args)
                 {
                     channel.QueueBind(queue,
-                                      exchange: "direct_logs",
-                                      routingKey: severity);
+                                      exchange: "topic_logs",
+                                      routingKey: bindingKey);
                 }
 
-                Console.WriteLine(" [*] Waiting for messages.");
+                Console.WriteLine(" [*] Waiting for messages. To exit press CTRL+C");
 
                 var consumer = new EventingBasicConsumer(channel);
                 consumer.Received += (model, ea) =>
